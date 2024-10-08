@@ -7,21 +7,9 @@ doc!.mml
     (&link rel!"stylesheet" link!"test.css")
 }.&head
 (&body) {
-    (&nav) {
-        (&a link!"./home.html"){Home}.&a
-        (&a link!"./about.html"){About}.&a
-    }.&nav
-
-    (&main) {
-        (&div class!"content" id!"abc" style!"margin:20px; padding:2px;") {
-            (&h2 class!"heading"){Hello!}.&h2
-            (&h1 class!"heading"){hi!}.&h1
-            (&text class!"test"){test}.&text
-            (&div id!"test") {
-                (&img src!"./test.png" alt!"test img")
-            }.&div
-        }.&div
-    }.&main
+    (&div style!""){
+        (&text)
+    }.&div
 
 }.&body
 }.&mml
