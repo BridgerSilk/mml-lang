@@ -1,15 +1,15 @@
 doc!.mml
-(&mml lang!"en") {
+(&mml lang.[en]) {
 (&head) {
-    (&meta charset!"UTF-8")
-    (&meta name!"viewport" content!"width!device-width, initial-scale!1.0")
+    (&meta charset.[UTF-8])
+    (&meta name.[viewport] content.[width=device-width, initial-scale=1.0])
     (&title){test}.&title
-    (&link rel!"stylesheet" link!"test.css")
+    (&link rel.[stylesheet] link.[test.css])
 }.&head
 (&body) {
-    (&div style!""){
-        (&text)
-    }.&div
+    (&ct style.[]){
+        (&text cl.[test]){test}.&text
+    }.&ct
 
 }.&body
 }.&mml
