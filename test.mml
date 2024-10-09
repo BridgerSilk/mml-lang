@@ -1,15 +1,43 @@
 doc!.mml
 (&mml lang.[en]) {
-(&head) {
+  (&head) {
     (&meta charset.[UTF-8])
     (&meta name.[viewport] content.[width=device-width, initial-scale=1.0])
-    (&title){test}.&title
+    (&title) { test } .&title
     (&link rel.[stylesheet] link.[test.css])
-}.&head
-(&body) {
-    (&ct style.[]){
-        (&text cl.[test]){test}.&text
-    }.&ct
+  }.&head
 
-}.&body
+  (&body) {
+    var.var_name = "Hello World!"
+    var.num = 5 + 3 * 2
+    var.result = :num: + 7
+
+    $export.navbar
+    (&nav) {
+      (&a link.[./home.html]) { Home } .&a
+      (&a link.[./about.html]) { About } .&a
+    }.&nav
+    $/export
+
+    $export.test
+    (&ct cl.[test] wtf.[ok]) {
+      (&text cl.[testclass]) { test1 } .&text
+      (&text) { test2 } .&text
+    }.&ct
+    $/export
+
+    (&main) {
+      (@main)
+      (&ct cl.[content] id.[abc]) {
+        (&h2 cl.[heading]) { Hello! } .&h2
+        (&text cl.[test]) { var content: :var_name: } .&text
+        (&p) { Result is: :result: } .&p
+      }.&ct
+    }.&main
+
+  }.&body
 }.&mml
+
+$export.main
+    (&text){ :var_name: }.&text
+$/export
