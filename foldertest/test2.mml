@@ -1,0 +1,3 @@
+$export.filetest
+    (&text){works!}.&text
+$/export

@@ -4,6 +4,24 @@ import re
 variables = {}
 components = {}
 
+def extract_includes(mml_content):
+    # Find and replace !include directives with the content of the included file
+    include_matches = re.findall(r'!include\s*\[\s*(.*?)\s*\]', mml_content)
+
+    for file_name in include_matches:
+        try:
+            with open(file_name, 'r') as included_file:
+                included_content = included_file.read()
+            # Process the included content recursively for variables, components, and more includes
+            included_content = extract_includes(included_content)
+            included_content = extract_variables(included_content)
+            included_content = extract_components(included_content)
+            mml_content = mml_content.replace(f'!include [{file_name}]', included_content)
+        except FileNotFoundError:
+            print(f"Error: File {file_name} not found.")
+    
+    return mml_content
+
 def extract_variables(mml_content):
     # Extract variable declarations (supports int, float, string)
     var_matches = re.findall(r'var\.([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*([^\n]+)', mml_content)
@@ -76,13 +94,16 @@ def substitute_components(mml_content):
     return mml_content
 
 def convert_mml_to_html(mml_content):
-    # Step 1: Extract variables from MML content
+    # Step 1: Extract includes first
+    mml_content = extract_includes(mml_content)
+
+    # Step 2: Extract variables from MML content
     mml_content = extract_variables(mml_content)
 
-    # Step 2: Extract components from MML content
+    # Step 3: Extract components from MML content
     mml_content = extract_components(mml_content)
     
-    # Step 3: Perform MML to HTML conversion
+    # Step 4: Perform MML to HTML conversion
     # Standard MML to HTML conversions
     mml_content = re.sub(r'doc!.mml', r'<!DOCTYPE html>', mml_content)
     mml_content = re.sub(r'!//', r'<!--', mml_content)
@@ -114,7 +135,7 @@ def convert_mml_to_html(mml_content):
     mml_content = re.sub(r'<ct>', r'<div>', mml_content)
     mml_content = re.sub(r'</ct>', r'</div>', mml_content)
 
-    # Step 4: Substitute variables and components in the content
+    # Step 5: Substitute variables and components in the content
     mml_content = substitute_components(mml_content)
     mml_content = substitute_variables(mml_content)
 
