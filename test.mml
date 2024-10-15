@@ -6,13 +6,13 @@ doc!.mml
         (&title) { test } .&title
         (&link rel.[stylesheet] link.[test.css])
 
-        !include [./foldertest/test2.mml]
+        !include [test2.mml]
     }.&head
 
     (&body) {
         var.var_name = "Hello World!"
         var.num = 5 + 3 * 2
-        var.result = :num: + 7
+        var.result = :thistest:
 
         (@filetest)
 
@@ -29,13 +29,13 @@ doc!.mml
             (&text) { test2 } .&text
         }.&ct
         $/export
-
+    
         (&main) {
             (@main)
             (&ct cl.[content] id.[abc]) {
                 (&h2 cl.[heading]) { Hello! } .&h2
                 (&text cl.[test]) { var content: :var_name: } .&text
-                (&p) { Result is: :result: } .&p
+                (&text) { Result is: :result: } .&text
             }.&ct
         }.&main
 
