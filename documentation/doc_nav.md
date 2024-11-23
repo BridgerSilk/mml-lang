@@ -10,6 +10,7 @@ Welcome to the MML Documentation overview!
 - [Syntax](./doc_syntax.md)
 - [Special Syntax](./doc_special_syntax.md)
 - [Variables](./doc_vars.md)
+- [Maps](./doc_maps.md)
 - [Comments](./doc_comments.md)
 
 ## Advanced
