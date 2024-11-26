@@ -35,6 +35,14 @@ In MML, some common HTML elements are represented by different syntax:
    }.&mml
    ```
 
+4. **Script Element (`<script>`)**
+
+   The HTML `<script>` element is represented as `&js` in MML. This stands for "javascript."
+
+   ```mml
+    (&js src.[myscript.js]){}.&js
+   ```
+
 ---
 
 ## Special Attributes
