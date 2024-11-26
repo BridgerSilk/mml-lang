@@ -18,7 +18,7 @@ In MML, some common HTML elements are represented by different syntax:
 
 2. **Container Element (`<div>`)**
 
-   The HTML `<div>` element is represented as `&ct` in MML. This stands for "container."
+   The HTML `<div>` element is represented as `&ct` in MML. This stands for "container".
 
    ```mml
    (&ct cl.[container]){This is a container}.&ct
@@ -37,10 +37,34 @@ In MML, some common HTML elements are represented by different syntax:
 
 4. **Script Element (`<script>`)**
 
-   The HTML `<script>` element is represented as `&js` in MML. This stands for "javascript."
+   The HTML `<script>` element is represented as `&js` in MML. This stands for "javascript".
 
    ```mml
-    (&js src.[myscript.js]){}.&js
+   (&js src.[myscript.js]) { } .&js
+   ```
+
+5. **Button Element (`<button>`)**
+
+   The HTML `<button>` element is represented as `&btn` in MML.
+
+   ```mml
+   (&btn) { Test } .&btn
+   ```
+
+5. **Horizontal Line Element (`<hr>`)**
+
+   The HTML `<hr>` element is represented as `&line` in MML.
+
+   ```mml
+   (&line)
+   ```
+
+5. **Span Element (`<span>`)**
+
+   The HTML `<span>` element is represented as `&ctin` in MML. This stands for "inline container" or "container inline".
+
+   ```mml
+   (&ctin) { Test } .&ctin
    ```
 
 ---
