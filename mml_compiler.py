@@ -101,6 +101,9 @@ def convert_component_to_html(component_body):
     component_body = re.sub(r'<ctin', r'<span', component_body)
     component_body = re.sub(r'<ctin>', r'<span>', component_body)
     component_body = re.sub(r'</ctin>', r'</span>', component_body)
+    component_body = re.sub(r'<in', r'<input', component_body)
+    component_body = re.sub(r'<in>', r'<input>', component_body)
+    component_body = re.sub(r'</in>', r'</input>', component_body)
     return component_body
 
 def substitute_components(mml_content):
@@ -141,9 +144,9 @@ def convert_mml_to_html(mml_content):
     mml_content = re.sub(r'</btn>', r'</button>', mml_content)
     mml_content = re.sub(r'<line', r'<hr', mml_content)
     mml_content = re.sub(r'<line>', r'<hr>', mml_content)
-    mml_content = re.sub(r'<ctin', r'<span', mml_content)
-    mml_content = re.sub(r'<ctin>', r'<span>', mml_content)
-    mml_content = re.sub(r'</ctin>', r'</span>', mml_content)
+    mml_content = re.sub(r'<in', r'<input', mml_content)
+    mml_content = re.sub(r'<in>', r'<input>', mml_content)
+    mml_content = re.sub(r'</in>', r'</input>', mml_content)
     # hr doesnt have an end tag
     mml_content = substitute_components(mml_content)
     mml_content = substitute_hashmaps(mml_content)

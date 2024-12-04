@@ -51,20 +51,28 @@ In MML, some common HTML elements are represented by different syntax:
    (&btn) { Test } .&btn
    ```
 
-5. **Horizontal Line Element (`<hr>`)**
+6. **Horizontal Line Element (`<hr>`)**
 
    The HTML `<hr>` element is represented as `&line` in MML.
 
    ```mml
-   (&line)
+   (&line)      
    ```
 
-5. **Span Element (`<span>`)**
+7. **Span Element (`<span>`)**
 
    The HTML `<span>` element is represented as `&ctin` in MML. This stands for "inline container" or "container inline".
 
    ```mml
    (&ctin) { Test } .&ctin
+   ```
+
+8. **Span Element (`<input>`)**
+
+   The HTML `<input>` element is represented as `&in` in MML.
+
+   ```mml
+   (&in)
    ```
 
 ---

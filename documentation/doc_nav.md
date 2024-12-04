@@ -19,8 +19,9 @@ Welcome to the MML Documentation overview!
 - [Importing MML Files](./doc_import_mml_files.md)
 - [Nesting HTML Code](./doc_nesting_mml_files.md)
 - [Creating Graphics](./doc_creating_graphics.md)
+- [Using htmx with MML](./doc_htmx_with_mml.md)
 
-## Examples 
+## Examples
 - [MML Login Form](./ex_login_form.md)
 - [MML Empty Page](./ex_empty_page.md)
 - [MML Gallery Page](./ex_gallery_page.md)

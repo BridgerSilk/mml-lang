@@ -65,4 +65,4 @@ By utilizing both Canvas and SVG in MML, you can set up a framework for graphics
 
 [<- Back to Doc Navigation](./doc_nav.md)
 <br>
-[Next Page ->](./ex_login_form.md)
+[Next Page ->](./doc_htmx_with_mml.md)
