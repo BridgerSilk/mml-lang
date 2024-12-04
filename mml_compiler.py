@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# NOTE: this is obviously NOT an actual compiler, it is just for prototyping purposes to build a proper syntax before actually building the compiler!
+
 import re
 
 variables = {}
