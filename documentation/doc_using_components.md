@@ -36,12 +36,18 @@ This would render the `header` component at two separate locations in the docume
 
 ## Using Components Across Files
 
-If you want to reuse a component from one file in another file, you need to include the file containing the component definition using the `!include` syntax. Once included, you can call the component as if it were defined in the current file.
+If you want to reuse a component from one file in another file, you need to include the file or folder of multiple files containing the component definition using the `!include` syntax. You can also include external files or folders from the web using valid http/https links. Once included, you can call the component as if it were defined in the current file.
 
 ### Example:
 
 ```mml
+!// including single mml files //!
 !include [./components.mml]
+!include [https://github.com/user/repo/tree/main/folder/file.mml]
+
+!// including folders containing multiple mml files //!
+!include [./folder/folder2]
+!include [https://github.com/user/repo/tree/main/folder/folder2]
 
 (@header)
 (@footer)
