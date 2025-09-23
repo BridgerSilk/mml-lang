@@ -61,10 +61,10 @@ In MML, some common HTML elements are represented by different syntax:
 
 7. **Span Element (`<span>`)**
 
-   The HTML `<span>` element is represented as `&ctin` in MML. This stands for "inline container" or "container inline".
+   The HTML `<span>` element is represented as `&inct` in MML. This stands for "inline container" or "container inline".
 
    ```mml
-   (&ctin) { Test } .&ctin
+   (&inct) { Test } .&inct
    ```
 
 8. **Span Element (`<input>`)**
