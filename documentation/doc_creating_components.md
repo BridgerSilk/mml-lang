@@ -6,24 +6,24 @@ Components in MML (Modern Markup Language) allow you to reuse blocks of code acr
 
 ## Defining a Component
 
-To create a component in MML, use the `!export` and `!/export` syntax. Components encapsulate MML elements, allowing them to be reused anywhere within the same file or across multiple files.
+To create a component in MML, use the `$export` and `$/export` syntax. Components encapsulate MML elements, allowing them to be reused anywhere within the same file or across multiple files.
 
 ### Basic Syntax:
 
 ```mml
-!export.component_name
+$export.component_name
     !// Component code here //!
-!/export
+$/export
 ```
 
 ### Example:
 
 ```mml
-!export.header
+$export.header
     (&ct cl.[header]) {
         (&text){Welcome to My Site}.&text
     }.&ct
-!/export
+$/export
 ```
 
 In this example, the `header` component is defined and can be used anywhere in the same file or in other files when included.
@@ -67,9 +67,9 @@ Variables defined within the same file where a component is called can be used i
 ```mml
 var.greeting = "Hello, World!"
 
-!export.greeting_component
+$export.greeting_component
     (&text cl.[greeting]){:greeting:}.&text
-!/export
+$/export
 
 (@greeting_component)
 ```
@@ -80,18 +80,18 @@ This allows you to pass dynamic content into your components. For more informati
 
 ## Case Sensitivity
 
-Component names are **case-sensitive** in MML. This means that `!export.Header` and `!export.header` would be treated as different components.
+Component names are **case-sensitive** in MML. This means that `$export.Header` and `$export.header` would be treated as different components.
 
 ### Example:
 
 ```mml
-!export.Header
+$export.Header
     (&text cl.[header]){Uppercase Header}.&text
-!/export
+$/export
 
-!export.header
+$export.header
     (&text cl.[header]){Lowercase Header}.&text
-!/export
+$/export
 
 (@Header)  !// Calls the uppercase header //!
 (@header)  !// Calls the lowercase header //!
@@ -114,17 +114,17 @@ Using components in every MML project offers several benefits:
 ### Example of a Typical Use Case:
 
 ```mml
-!export.footer
+$export.footer
     (&ct cl.[footer]) {
         (&text){© 2024 My Website}.&text
     }.&ct
-!/export
+$/export
 
-!export.header
+$export.header
     (&ct cl.[header]) {
         (&text){Welcome to My Website}.&text
     }.&ct
-!/export
+$/export
 
 (&mml lang.[en]) {
     (&body) {

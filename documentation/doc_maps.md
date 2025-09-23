@@ -70,9 +70,9 @@ Map items can be accessed inside reusable components if the map is initialized i
 ### Example:
 
 ```mml
-!export.example
+$export.example
 (&text){:mymap.mykey:}.&text
-!/export
+$/export
 
 !// Call the component and display the item //!
 (@example)

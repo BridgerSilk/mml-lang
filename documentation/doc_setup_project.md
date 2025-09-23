@@ -47,12 +47,12 @@ my-mml-project/
    Inside the `components/` folder, create a file called `navbar.mml`:
 
    ```mml
-   !export.navbar
+   $export.navbar
    (&nav) {
        (&a link.[./index.html]){Home}.&a
        (&a link.[./about.html]){About}.&a
    }.&nav
-   !/export
+   $/export
    ```
 
 3. **Use the component in `index.mml`:**

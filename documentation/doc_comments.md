@@ -47,9 +47,9 @@ This will be converted to the following HTML:
 var.title = "Welcome to My Site"
 
 !// Header component //!
-!export.header
+$export.header
 (&text cl.[header]){:title:}.&text
-!/export
+$/export
 
 (&mml lang.[en]) {
     (&body) {

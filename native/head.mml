@@ -1,3 +1,0 @@
-$export.testhead
-(&text){ test }.&text
-$/export

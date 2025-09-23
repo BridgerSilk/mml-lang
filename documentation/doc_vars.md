@@ -47,9 +47,9 @@ Variables can be used inside reusable components if the variable is defined in t
 ### Example:
 
 ```mml
-!export.example
+$export.example
 (&text){:greeting:}.&text
-!/export
+$/export
 
 !// Call the component and use the variable //!
 (@example)
@@ -121,9 +121,9 @@ This will output:
 var.title = "Welcome"
 var.year = 2024
 
-!export.header
+$export.header
 (&text cl.[header]){:title:}.&text
-!/export
+$/export
 
 !// Call the header component //!
 (@header)

@@ -1,6 +1,6 @@
 # MML (Modern Markup Language)
 
-MML is a new modern markup language made for front-end web development, fully based on HTML and compiled with python. MML offers several new ways of making a website, as it introduces variables, re-usable components and external file import functionality. All valid HTML code is also valid MML code, as it is built on top of HTML.
+MML is a new modern markup language made for front-end web development, fully based on HTML and converted with python. MML offers several new ways of making a website, as it introduces variables, re-usable components and external file import functionality. All valid HTML code is also valid MML code, as it is built on top of HTML.
 
 ---
 
@@ -51,7 +51,7 @@ MML is a new modern markup language made for front-end web development, fully ba
 - Good readability due to dynamic syntax
 - Supports dynamic syntax writing (different ways to write the syntax)
 - All valid HTML code is also valid MML code
-- Very fast compilation even with huge MML pages and external imports
+- Very fast conversion even with huge MML pages and external imports
 
 ## Documentation
 
