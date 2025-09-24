@@ -1,7 +1,7 @@
 doc!.mml
 
-!include [test2.mml]
-!include native []
+!include native [std.mml]
+!include [test/testinclude.mml]
 
 (&mml lang.[en]) {
     (&head) {
@@ -13,9 +13,20 @@ doc!.mml
     }.&head
 
     (&body) {
-        var.var_name = "Hello World!"
-        var.num = 5 + 3 * 2
-        var.result = :thistest:
+        static color a = c["red"]
+        static color b = c[red=1]
+        static color c = c["blue", hue=0]
+        static color d = c["#a36b9fff"]
+        static color e = c[hsl=(0, 1, 0.5)]
+
+        a = c["blue"]
+        a = "test"
+
+        (&text){:a:}.&text
+        (&text){:b:}.&text
+        (&text){:c:}.&text
+        (&text){:d:}.&text
+        (&text){:e:}.&text
 
         (@filetest)
 
