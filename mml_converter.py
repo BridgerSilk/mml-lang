@@ -4,6 +4,7 @@ import requests
 from urllib.parse import urljoin
 import uuid
 from colour import Color
+import math
 
 # Global dictionaries to store variables, components, and hashmaps
 variables = {}
@@ -124,7 +125,7 @@ def assign_variables(mml_content):
         var_value = match.group(2).strip()
 
         if var_name not in variables:
-            return match.group(0)  # ignore undeclared vars
+            return match.group(0)
 
         var_info = variables[var_name]
         var_value = substitute_variables(var_value)
@@ -182,103 +183,172 @@ def is_valid_color(value):
         return False
 
 def safe_eval(value, expected_type=None):
-    value = value.strip()
+	value = value.strip()
 
-    # Handle 'new uuidX' keyword
-    if value.startswith("new "):
-        if expected_type is None or expected_type == "uuid":
-            parts = value.split()
-            if len(parts) == 2 and parts[1].startswith("uuid"):
-                version = parts[1][4:]
-                try:
-                    if version == "1":
-                        return uuid.uuid1()
-                    elif version == "3":
-                        # For simplicity, use namespace DNS and some name
-                        return uuid.uuid3(uuid.NAMESPACE_DNS, "example")
-                    elif version == "4":
-                        return uuid.uuid4()
-                    elif version == "5":
-                        return uuid.uuid5(uuid.NAMESPACE_DNS, "example")
-                except:
-                    return None
-        return None
+	safe_globals = {
+		"__builtins__": None,
+		"math": math,
+		"int": int, "float": float, "str": str, "bool": bool, "complex": complex, "list": list,
+		"tuple": tuple, "set": set, "len": len, "abs": abs, "min": min, "max": max, "round": round,
+		"uuid": uuid, "Color": Color,
+	}
 
-    # UUID literal: uuid['...']
-    if value.startswith("uuid[") and value.endswith("]"):
-        try:
-            inside = value[5:-1].strip().strip("'").strip('"')
-            return uuid.UUID(inside)
-        except:
-            return None
+	# Handle 'new uuidX' keyword
+	if value.startswith("new "):
+		if expected_type is None or expected_type == "uuid":
+			parts = value.split()
+			if len(parts) == 2 and parts[1].startswith("uuid"):
+				version = parts[1][4:]
+				try:
+					if version == "1":
+						return uuid.uuid1()
+					elif version == "3":
+						return uuid.uuid3(uuid.NAMESPACE_DNS, "example")
+					elif version == "4":
+						return uuid.uuid4()
+					elif version == "5":
+						return uuid.uuid5(uuid.NAMESPACE_DNS, "example")
+				except:
+					return None
+		return None
 
-    # Vector parsing
-    if value.startswith("v[") and value.endswith("]"):
-        inside = value[2:-1].strip()
-        parts = [p.strip() for p in inside.split(",")]
+	# --- Step 1: Handle "(expr -> type)" or "expr -> type" casts properly ---
+	cast_match = re.match(
+		r'^\(?\s*(.+?)\s*->\s*(str|i32|float|list|bool|nonetype|complex|'
+		r'vec2i|vec3i|vecf|uuid|bit|char|color)\s*\)?$', value
+	)
+	if cast_match:
+		expr, cast_type = cast_match.groups()
+		expr = expr.strip()
 
-        try:
-            if expected_type == "vec2i":
-                if len(parts) == 2 and all(p.isdigit() for p in parts):
-                    return (int(parts[0]), int(parts[1]))
-            elif expected_type == "vec3i":
-                if len(parts) == 3 and all(p.isdigit() for p in parts):
-                    return (int(parts[0]), int(parts[1]), int(parts[2]))
-            elif expected_type == "vecf":
-                if len(parts) == 2 and all("." in p or p.replace(".", "", 1).isdigit() for p in parts):
-                    return (float(parts[0]), float(parts[1]))
-            else:
-                # Dynamic vectors
-                if all("." in p or p.replace(".", "", 1).isdigit() for p in parts):
-                    return tuple(float(p) for p in parts)
-                elif all(p.isdigit() for p in parts):
-                    return tuple(int(p) for p in parts)
-        except:
-            return None
-        return None
-    
-    # New color type
-    if expected_type == "color":
-        try:
-            # For color["red"] style or color with kwargs
-            if value.startswith("c[") and value.endswith("]"):
-                inner = value[2:-1].strip()
-                # Evaluate inner safely
-                evaluated_inner = eval(inner)
-                color_obj = Color(evaluated_inner)
-                return color_obj
-        except:
-            return None
+		# Recursively evaluate the inner expression
+		inner_val = safe_eval(expr, None)
+		if inner_val is None:
+			try:
+				inner_val = eval(expr, safe_globals, {})
+			except:
+				inner_val = expr.strip().strip('"').strip("'")
 
-    # Normal eval
-    try:
-        result = eval(value)
-    except:
-        result = value.strip('"').strip("'")
+		try:
+			if cast_type == "str":
+				return str(inner_val)
+			elif cast_type == "i32":
+				return int(inner_val)
+			elif cast_type == "float":
+				return float(inner_val)
+			elif cast_type == "list":
+				return list(inner_val) if inner_val is not None else []
+			elif cast_type == "bool":
+				return bool(inner_val)
+			elif cast_type == "nonetype":
+				return None
+			elif cast_type == "complex":
+				return complex(inner_val)
+			elif cast_type == "vec2i":
+				if isinstance(inner_val, (list, tuple)) and len(inner_val) == 2:
+					return tuple(int(x) for x in inner_val)
+			elif cast_type == "vec3i":
+				if isinstance(inner_val, (list, tuple)) and len(inner_val) == 3:
+					return tuple(int(x) for x in inner_val)
+			elif cast_type == "vecf":
+				if isinstance(inner_val, (list, tuple)) and len(inner_val) == 2:
+					return tuple(float(x) for x in inner_val)
+			elif cast_type == "uuid":
+				if isinstance(inner_val, str):
+					return uuid.UUID(inner_val)
+				if isinstance(inner_val, uuid.UUID):
+					return inner_val
+			elif cast_type == "bit":
+				if inner_val in (0, 1):
+					return int(inner_val)
+				if isinstance(inner_val, bool):
+					return int(inner_val)
+			elif cast_type == "char":
+				if isinstance(inner_val, str) and len(inner_val) == 1:
+					return inner_val
+				if isinstance(inner_val, int):
+					return chr(inner_val)
+			elif cast_type == "color":
+				if isinstance(inner_val, str):
+					return Color(inner_val)
+				if isinstance(inner_val, (list, tuple)) and len(inner_val) >= 3:
+					return Color(rgb=(float(inner_val[0]), float(inner_val[1]), float(inner_val[2])))
+		except Exception:
+			return None
+		return inner_val
 
-    # Standard type checks
-    if expected_type == "char" and isinstance(result, str) and len(result) == 1:
-        return result 
-    elif expected_type == "str" and isinstance(result, str):
-        return result 
-    elif expected_type == "bit" and isinstance(result, int) and not isinstance(result, bool) and result in (0, 1):
-        return result
-    elif expected_type == "i32" and isinstance(result, int) and not isinstance(result, bool):
-        return result
-    elif expected_type == "float" and isinstance(result, float):
-        return result
-    elif expected_type == "list" and isinstance(result, list):
-        return result
-    elif expected_type == "bool" and isinstance(result, bool):
-        return result
-    elif expected_type == "nonetype" and result is None:
-        return result
-    elif expected_type == "complex" and isinstance(result, complex):
-        return result
-    elif expected_type == "uuid" and isinstance(result, uuid.UUID):
-        return result
+	# UUID literal: uuid['...']
+	if value.startswith("uuid[") and value.endswith("]"):
+		try:
+			inside = value[5:-1].strip().strip("'").strip('"')
+			return uuid.UUID(inside)
+		except:
+			return None
 
-    return None
+	# Vector parsing
+	if value.startswith("v[") and value.endswith("]"):
+		inside = value[2:-1].strip()
+		parts = [p.strip() for p in inside.split(",")]
+
+		try:
+			if expected_type == "vec2i":
+				if len(parts) == 2 and all(p.isdigit() for p in parts):
+					return (int(parts[0]), int(parts[1]))
+			elif expected_type == "vec3i":
+				if len(parts) == 3 and all(p.isdigit() for p in parts):
+					return (int(parts[0]), int(parts[1]), int(parts[2]))
+			elif expected_type == "vecf":
+				if len(parts) == 2 and all("." in p or p.replace(".", "", 1).isdigit() for p in parts):
+					return (float(parts[0]), float(parts[1]))
+			else:
+				if all("." in p or p.replace(".", "", 1).isdigit() for p in parts):
+					return tuple(float(p) for p in parts)
+				elif all(p.isdigit() for p in parts):
+					return tuple(int(p) for p in parts)
+		except:
+			return None
+		return None
+
+	# New color type
+	if expected_type == "color":
+		try:
+			if value.startswith("c[") and value.endswith("]"):
+				inner = value[2:-1].strip()
+				evaluated_inner = eval(inner)
+				color_obj = Color(evaluated_inner)
+				return color_obj
+		except:
+			return None
+
+	# Normal eval
+	try:
+		result = eval(value, safe_globals, {})
+	except:
+		result = value.strip('"').strip("'")
+
+	# Standard type checks
+	if expected_type == "char" and isinstance(result, str) and len(result) == 1:
+		return result 
+	elif expected_type == "str" and isinstance(result, str):
+		return result 
+	elif expected_type == "bit" and isinstance(result, int) and not isinstance(result, bool) and result in (0, 1):
+		return result
+	elif expected_type == "i32" and isinstance(result, int) and not isinstance(result, bool):
+		return result
+	elif expected_type == "float" and isinstance(result, float):
+		return result
+	elif expected_type == "list" and isinstance(result, list):
+		return result
+	elif expected_type == "bool" and isinstance(result, bool):
+		return result
+	elif expected_type == "nonetype" and result is None:
+		return result
+	elif expected_type == "complex" and isinstance(result, complex):
+		return result
+	elif expected_type == "uuid" and isinstance(result, uuid.UUID):
+		return result
+
+	return None
 
 def merge_variables_from_include(included_vars):
     """
@@ -301,8 +371,14 @@ def substitute_variables(mml_content):
 			replacement = value
 		else:
 			replacement = str(value)
-		mml_content = re.sub(f':{var_name}:', replacement, mml_content)
+		mml_content = re.sub(f':{var_name}:(?!type)', replacement, mml_content)
 	return mml_content
+
+def substitute_variable_functions(mml_content):
+    for var_name, var_info in variables.items():
+        datatype = var_info["datatype"]
+        mml_content = re.sub(rf':{var_name}:\?type\b', datatype, mml_content)
+    return mml_content
 
 def extract_hashmaps(mml_content):
     """
@@ -394,6 +470,7 @@ def convert_mml_to_html(mml_content):
     variables.update(shared_variables)
     mml_content = extract_includes(mml_content)
     mml_content = extract_variables(mml_content)
+    mml_content = substitute_variable_functions(mml_content)
     mml_content = assign_variables(mml_content)
     mml_content = extract_hashmaps(mml_content)
     mml_content = extract_components(mml_content)

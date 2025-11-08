@@ -13,22 +13,17 @@ doc!.mml
     }.&head
 
     (&body) {
-        static color a = c["red"]
-        static color b = c[red=1]
-        static color c = c["blue", hue=0]
-        static color d = c["#a36b9fff"]
-        static color e = c[hsl=(0, 1, 0.5)]
+        static i32 a = 4
+        dynamic b = (:a: -> float) 
+        static uuid x = new uuid4
 
-        a = c["blue"]
-        a = "test"
+        b = (5 -> float)
+        
+        (&ct){:a:}.&ct
+        (&ct){:b:}.&ct
+        (&ct){:x:}.&ct
 
-        (&text){:a:}.&text
-        (&text){:b:}.&text
-        (&text){:c:}.&text
-        (&text){:d:}.&text
-        (&text){:e:}.&text
-
-        (@filetest)
+        (@testxyz)
 
         $export.navbar
         (&nav) {

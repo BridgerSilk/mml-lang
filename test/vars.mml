@@ -1,0 +1,44 @@
+doc!.mml
+(&mml)
+	(&ct)
+
+		!// --- Static Variable Type Tests --- //!
+
+		static str str_var = "Hello MML!"
+		static i32 int_var = 42
+		static float float_var = 3.1415
+		static list list_var = [1, 2, 3]
+		static bool bool_var = True
+		static nonetype none_var = None
+		static complex complex_var = (2 + 3j)
+		static vec2i vec2i_var = v[10, 20]
+		static vec3i vec3i_var = v[1, 2, 3]
+		static vecf vecf_var = v[0.5, 0.75]
+		static uuid uuid_var = new uuid4
+		static bit bit_var = 1
+		static char char_var = "A"
+		static color color_var = c["red"]
+        dynamic x = 0
+
+        x = (:int_var: -> float)
+
+		!// --- Print All Variables --- //!
+
+		(&text){:x:}.&text
+		(&text){String: :str_var:}.&text
+		(&text){Integer: :int_var:}.&text
+		(&text){Float: :float_var:}.&text
+		(&text){List: :list_var:}.&text
+		(&text){Boolean: :bool_var:}.&text
+		(&text){NoneType: :none_var:}.&text
+		(&text){Complex: :complex_var:}.&text
+		(&text){Vec2i: :vec2i_var:}.&text
+		(&text){Vec3i: :vec3i_var:}.&text
+		(&text){Vecf: :vecf_var:}.&text
+		(&text){UUID: :uuid_var:}.&text
+		(&text){Bit: :bit_var:}.&text
+		(&text){Char: :char_var:}.&text
+		(&text){Color: :color_var:}.&text
+
+	.&ct
+.&mml
