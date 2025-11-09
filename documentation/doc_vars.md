@@ -1,144 +1,155 @@
 # Variables
 
-MML (Modern Markup Language) supports the use of variables to make your code more dynamic and reusable. This guide covers how to define, use, and manipulate variables in MML.
+MML (Modern Markup Language) supports variables to make your code dynamic, flexible, and reusable. Variables can be either **static** or **dynamic**, with strict or flexible typing rules. This guide explains how to define, use, and manage variables in MML.
 
 ---
 
 ## Defining Variables
 
-Variables in MML are defined using the following syntax:
+Variables are declared using either the `static` or `dynamic` keyword.
 
 ```mml
-var.var_name = value
+static <type> <name> = <value>
+dynamic <name> = <value>
 ```
 
-### Example:
+* **Static variables** have a fixed data type and cannot change to another type after declaration.
+* **Dynamic variables** can hold any type and change type during runtime.
+
+### Examples
 
 ```mml
-var.greeting = "Hello, world!"
-var.number = 42
-var.pi = 3.14
+static str greeting = "Hello, world!"
+static i32 count = 42
+dynamic value = True
 ```
 
-In this example, the variables `greeting`, `number`, and `pi` are defined as a string, integer, and float, respectively.
+In this example:
+
+* `greeting` is a static string.
+* `count` is a static 32-bit integer.
+* `value` is a dynamic variable, starting as a boolean.
+
+> 💡 See the [Data Types page](./doc_data_types.md) for a full list of supported types.
 
 ---
 
-## Using Variables
+## Using Variables in Elements
 
-Once defined, variables can be used inside any MML element by wrapping the variable name in `:variable_name:`.
-
-### Example:
+Variables are referenced in elements using the `:variable_name:` syntax.
 
 ```mml
 (&text){:greeting:}.&text
 ```
 
-This will output:
+Output:
 
 ```html
 <p>Hello, world!</p>
 ```
 
-### Using Variables Inside Components
+---
 
-Variables can be used inside reusable components if the variable is defined in the same file where the component is called. However, variables cannot be defined directly inside a component itself.
+## Using Variables Inside Components
 
-### Example:
+You can use variables inside components as long as the variable is defined before the component call.
 
 ```mml
-$export.example
+$export.message
 (&text){:greeting:}.&text
 $/export
 
-!// Call the component and use the variable //!
-(@example)
+(@message)
 ```
 
-In this example, the `greeting` variable can be used within the `example` component because it's defined before the component is called.
+---
+
+## Checking Variable Types
+
+You can check the type of a variable or value using the `?type` method.
+
+### Examples
+
+```mml
+greeting?type
+65?type
+```
+
+Outputs:
+
+```
+str
+i32
+```
+
+---
+
+## Type Casting
+
+MML supports type casting using the `(<value> -> <type>)` syntax.
+
+### Examples
+
+```mml
+(myvar -> str)
+(25 -> float)
+```
+
+If a cast is invalid (e.g., `str` → `i32`), it is **ignored silently** without throwing an error.
+
+---
+
+## UUID Generation
+
+UUIDs can be generated directly using the `new` keyword.
+
+### Example
+
+```mml
+static uuid id1 = new uuid1
+static uuid id4 = new uuid4
+```
+
+Supported UUID types: `1`, `3`, `4`, `5`.
 
 ---
 
 ## Case Sensitivity
 
-MML variables are **case-sensitive**. This means that `var.myVar` and `var.myvar` are considered two different variables.
+Variable names in MML are **case-sensitive**.
 
 ```mml
-var.myVar = "This is MyVar"
-var.myvar = "This is myvar"
+static str MyVar = "Hello"
+static str myvar = "World"
 ```
+
+These are **two separate variables**.
 
 ---
 
-## Supported Data Types
-
-MML supports the following data types for variables:
-
-- **String**: Enclosed in double quotes.
-  ```mml
-  var.message = "Hello, world!"
-  ```
-
-- **Integer**: Whole numbers.
-  ```mml
-  var.age = 25
-  ```
-
-- **Float**: Decimal numbers.
-  ```mml
-  var.pi = 3.14
-  ```
-
----
-
-## Mathematical Expressions
-
-MML supports simple mathematical expressions with variables. You can use addition, subtraction, multiplication, and division.
-
-### Example:
+## Example Combining Variables, Casting, and Components
 
 ```mml
-var.result = 5 + 2 * 3
-```
-
-You can then display the result of the expression:
-
-```mml
-(&text){:result:}.&text
-```
-
-This will output:
-
-```html
-<p>11</p>
-```
-
----
-
-## Example Combining Variables and Components
-
-```mml
-var.title = "Welcome"
-var.year = 2024
+static str title = "Welcome"
+dynamic value = 25
+value = (value -> float)
 
 $export.header
 (&text cl.[header]){:title:}.&text
 $/export
 
-!// Call the header component //!
 (@header)
-
-(&text cl.[footer]){Current Year: :year:}.&text
+(&text cl.[footer]){Value Type: :value?type:}.&text
 ```
 
-This example defines two variables (`title` and `year`) and uses them inside both a reusable component (`header`) and directly in the page.
+Output:
+
+```html
+<p class="header">Welcome</p>
+<p class="footer">Value Type: float</p>
+```
 
 ---
 
-Understanding how to define and use variables will help make your MML code more dynamic and easier to maintain.
-
----
-
-[<- Back to Doc Navigation](./doc_nav.md)
-<br>
-[Next Page ->](./doc_maps.md)
+[<- Back to Doc Navigation](./doc_nav.md) <br>
+[Next Page ->](./data_types.md)

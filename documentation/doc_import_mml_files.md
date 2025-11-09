@@ -1,35 +1,49 @@
 # Importing MML Files
 
-In MML (Modern Markup Language), you can import other `.mml` files into your current file using the `!include` syntax. This feature allows you to modularize your code by separating components, styles, or any other reusable content into different files. It enhances maintainability and encourages code reuse across multiple pages.
+You can include other `.mml` files to reuse components or structure your code modularly.
+Now MML also supports **native includes**, allowing you to import official MML components directly.
 
 ---
 
-## Using the `!include` Syntax
-
-To import an MML file, use the `!include` directive followed by the path to the file you want to include. The path can be relative to the current file.
-
-### Basic Syntax:
-
-```mml
-!include [./path/to/file.mml]
-```
-
-### Example:
+## Standard Includes
 
 ```mml
 !include [./components/header.mml]
 ```
 
-In this example, the `header.mml` file is included, allowing you to use any components defined within it.
+Includes a local `.mml` file from your project directory.
 
-**Note:** The `!include` expression can **only** be used for importing other `.mml` files. For including external CSS stylesheets or JavaScript scripts, you still need to use the `(&style)` or `(&script)` syntax.
+All exported components get imported when including an mml file.
 
-### Example for Including Styles and Scripts:
+---
+
+## Native Includes
 
 ```mml
-(&style link.[./styles/main.css])
-(&script src.[./scripts/main.js])
+!include native [file.mml]
 ```
+
+Native includes let you import files directly from the **official MML GitHub repository** under the `components/` directory.
+
+For example:
+
+```mml
+!include native [std.mml]
+```
+
+This loads the official `std.mml` file and gives access to its components.
+
+### Currently Available Native Components
+
+* **std.mml** → Components: `testxyz`
+
+---
+
+## Notes
+
+* Native includes always fetch from the official repository.
+* Use them to access standard, reusable MML libraries.
+* Custom includes remain supported via the normal `!include` syntax.
 
 ---
 

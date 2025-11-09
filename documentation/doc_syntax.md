@@ -22,7 +22,7 @@ doc!.mml
     (&body) {
         !// comment example //!
         
-        var.test = "hello"
+        static str test = "hello"
 
         (&nav) {
             (&a link.[./home.html]){Home}.&a
@@ -47,7 +47,7 @@ doc!.mml
 
 ## MML Comments
 
-- Comments in MML are denoted using the `!//` syntax.
+- Comments in MML are denoted using the `!//` and `//!` syntax.
   
 ### Example:
 

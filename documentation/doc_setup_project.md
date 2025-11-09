@@ -69,7 +69,7 @@ my-mml-project/
            (&title){My First MML Page}.&title
        }.&head
        (&body) {
-           !// Include the navbar component //!
+           !// Loading the navbar component //!
            (@navbar)
 
            (&text cl.[welcome-text]){Hello, MML World!}.&text
