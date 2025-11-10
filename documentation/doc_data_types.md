@@ -81,4 +81,4 @@ Future releases will expand `new` to support other instance types.
 ---
 
 [<- Back to Variables](./variables.md) <br>
-[Next Page ->](./doc_importing.md)
+[Next Page ->](./doc_maps.md)

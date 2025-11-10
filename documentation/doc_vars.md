@@ -152,4 +152,4 @@ Output:
 ---
 
 [<- Back to Doc Navigation](./doc_nav.md) <br>
-[Next Page ->](./data_types.md)
+[Next Page ->](./doc_data_types.md)
