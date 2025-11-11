@@ -35,8 +35,8 @@ MML is a new modern markup language made for front-end web development, fully ba
     !// components.mml contains the public std_head component in this case, which is a basic <head> //!
     !include [./components.mml]
 
-    var.title = "My Website"
-    var.csslink = "./style.css"
+    static str title = "My Website"
+    static str csslink = "./style.css"
 
     (&mml lang.[en]) {
         (@std_head) !// calling the component //!
